@@ -1,12 +1,14 @@
+#!/usr/bin/env python3 
+# -*- coding: utf-8 -*-
 """
 Simulación de señales neuronales mediante circuitos RC 
 
-Concurso de aparatos y experimentos
+7º Concurso Estatal de Aparatos y Experimentos de Física
 Luis Eduardo Sánchez González
 
 lun 12 abr 2021 19:23:12 CDT 
 
-Repositorio Github: 
+Repositorio Github: https://github.com/Luis2501/Neural-signal-simulation
 """
 import numpy as np
 
@@ -18,7 +20,7 @@ class Axon:
         
 		try:
         
-			self.InitialConditions = np.zeros(N)
+			self.InitCond = np.zeros(N)
         
 			if isinstance(V0, (int, float)):
         
@@ -28,11 +30,11 @@ class Axon:
             
 				self.V0 = V0 
                 
-			self.InitialConditions[0] = self.V0(0)
+			self.InitCond[0] = self.V0(0)
             
 		except:
             
-			print("Voltaje no puede ser definido")
+			print("Voltaje no definido")
     
 	def dV(self, Vi, Vf):
         
@@ -59,14 +61,14 @@ if __name__ == "__main__":
 	Axon_0 = Axon(70e-3, 1e-10, 1e8, 1e6, N = 100)
 
 	Solucion = Euler(Axon_0)
-	Solucion.InitialConditions(Axon_0.InitialConditions, [0, 1e-2], 1e-6)
+	Solucion.InitialConditions(Axon_0.InitCond, [0, 1e-2], 1e-6)
 	V, t = Solucion.SolveODE()
 
 	for i in range(0, len(t), 1000):
 
     		plt.plot(V[i,:], label ="t ="+f"{round(i*1e-6,3)} s")
 
-	plt.title("Voltaje en los circuitos")
+	plt.title("Voltaje através de los circuitos")
 	plt.grid() ; plt.legend() 
 	plt.ylabel("Voltaje (V)")
 	plt.xlabel("Circuito (N)")
