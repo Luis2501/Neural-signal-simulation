@@ -17,28 +17,27 @@ class Axon:
 	def __init__(self, V0, C, R1, R2, N):
         
 		self.C, self.R1, self.R2 = C, R1, R2  
+		self.N = N        
+		
+		self.InitCond = np.zeros(N)
         
-		try:
+		if isinstance(V0, (int, float)):
         
-			self.InitCond = np.zeros(N)
-        
-			if isinstance(V0, (int, float)):
-        
-				self.V0 = lambda t: V0  
-            
-			elif callable(V0):
-            
-				self.V0 = V0 
-                
+			self.V0 = lambda t: V0  
 			self.InitCond[0] = self.V0(0)
             
-		except:
+		elif callable(V0):
             
-			print("Voltaje no definido")
+			self.V0 = V0 
+			self.InitCond[0] = self.V0(0)
+            
+		else:
+            
+			raise ValueError("Voltaje no definido")
     
 	def dV(self, Vi, Vf):
-        
-		return (1/self.C)*(((Vi-Vf)/self.R2) - (Vf/self.R1))
+
+		return (1/self.C)*(((Vi-Vf)/self.R2)-(Vf/self.R1))
 
 	def __call__(self, v, t):
         
@@ -58,15 +57,19 @@ if __name__ == "__main__":
 	import matplotlib.pyplot as plt
 	from PhysicsPy.ODEsMethods import *
 
-	Axon_0 = Axon(70e-3, 1e-10, 1e8, 1e6, N = 100)
+	axon = Axon(70e-3, 1e-10, 1e8, 1e6, N = 100)
 
-	Solucion = Euler(Axon_0)
-	Solucion.InitialConditions(Axon_0.InitCond, [0, 1e-2], 1e-6)
+	Solucion = Euler(axon)
+	Solucion.InitialConditions(axon.InitCond, [0, 1e-2], 1e-6)
 	V, t = Solucion.SolveODE()
 
 	for i in range(0, len(t), 1000):
 
     		plt.plot(V[i,:], label ="t ="+f"{round(i*1e-6,3)} s")
+
+	#for i in range(0, len(V[0]), 10):
+
+	#	plt.plot(t, V[:,i], label = f"{i}")
 
 	plt.title("Voltaje através de los circuitos")
 	plt.grid() ; plt.legend() 

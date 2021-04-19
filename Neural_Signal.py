@@ -18,7 +18,7 @@ import matplotlib.pyplot as plt
 from PhysicsPy.ODEsMethods import *
 from scipy.signal import square, sawtooth
 
-V1 = lambda t: (70e-3)*np.sin(2*np.pi*200*t)*np.heaviside(0.01-t, 1)
+V1 = lambda t: (70e-3)*np.sin(2*np.pi*300*t)*np.heaviside(0.01-t, 1)
 V2 = lambda t: (70e-3)*square(2 * np.pi * 300 * t)*np.heaviside(0.01-t, 1)
 
 Voltajes = [V1, V2]
