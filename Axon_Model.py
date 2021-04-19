@@ -1,7 +1,7 @@
 #!/usr/bin/env python3 
 # -*- coding: utf-8 -*-
 """
-Simulación de señales neuronales mediante circuitos RC 
+Simulación de señales neuronales mediante circuitos RC (Clase 'Axon')
 
 7º Concurso Estatal de Aparatos y Experimentos de Física
 Luis Eduardo Sánchez González
@@ -15,7 +15,20 @@ import numpy as np
 class Axon:
     
 	def __init__(self, V0, C, R1, R2, N):
-        
+
+		"""
+        	Constructor de la clase.
+
+		------------------------
+		Parámetros
+		------------------------
+
+		C: Capacitancia de la membrana
+		R1: Resistencia de la membrana
+		R2: Resistencia del axón 
+		N: Número de circuitos
+		"""
+
 		self.C, self.R1, self.R2 = C, R1, R2  
 		self.N = N        
 		
@@ -37,6 +50,12 @@ class Axon:
     
 	def dV(self, Vi, Vf):
 
+		"""	
+		Ecuación diferencial.
+
+		V' = 1/C [(V0 - V)/R2 - V/R1]   
+		"""
+
 		return (1/self.C)*(((Vi-Vf)/self.R2)-(Vf/self.R1))
 
 	def __call__(self, v, t):
@@ -49,30 +68,3 @@ class Axon:
 			V[i + 1] += self.dV(v[i], v[i + 1]) 
 
 		return V
-
-if __name__ == "__main__":
-
-	from sys import path
-	path.append("../")
-	import matplotlib.pyplot as plt
-	from PhysicsPy.ODEsMethods import *
-
-	axon = Axon(70e-3, 1e-10, 1e8, 1e6, N = 100)
-
-	Solucion = Euler(axon)
-	Solucion.InitialConditions(axon.InitCond, [0, 1e-2], 1e-6)
-	V, t = Solucion.SolveODE()
-
-	for i in range(0, len(t), 1000):
-
-    		plt.plot(V[i,:], label ="t ="+f"{round(i*1e-6,3)} s")
-
-	#for i in range(0, len(V[0]), 10):
-
-	#	plt.plot(t, V[:,i], label = f"{i}")
-
-	plt.title("Voltaje através de los circuitos")
-	plt.grid() ; plt.legend() 
-	plt.ylabel("Voltaje (V)")
-	plt.xlabel("Circuito (N)")
-	plt.show()
