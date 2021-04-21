@@ -14,10 +14,10 @@ import numpy as np
 from Axon_Model import Axon
 import matplotlib.pyplot as plt
 from PhysicsPy.ODEsMethods import *
-from scipy.signal import square, sawtooth
+from scipy.signal import square
 
 V1 = lambda t: (70e-3)*np.sin(2*np.pi*300*t)*np.heaviside(0.01-t, 1)
-V2 = lambda t: (70e-3)*square(2 * np.pi * 300 * t)*np.heaviside(0.01-t, 1)
+V2 = lambda t: (70e-3)*square(2*np.pi*300*t)*np.heaviside(0.01-t, 1)
 
 Voltajes = [V1, V2]
 
@@ -45,7 +45,7 @@ for i in range(2):
 	ax2.set_xlabel("tiempo (s)") 
 	ax2.set_ylabel("Voltaje (V)")
 	ax2.grid() ; ax2.legend() 
-	
+
 	del axon 
 
 	fig.tight_layout()
